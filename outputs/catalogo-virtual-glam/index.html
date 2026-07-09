@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo digital Glam by Adriana Montoya</title>
+  <link rel="stylesheet" href="styles.css?v=44">
+</head>
+<body>
+  <header class="siteHeader">
+    <a class="brand" href="#inicio" aria-label="Inicio">
+      <img src="assets/logo-glam.png" alt="Glam by Adriana Montoya">
+    </a>
+    <nav class="topNav" aria-label="Navegación principal">
+      <button id="openAdminButton" type="button">Añadir artículos</button>
+    </nav>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="hero__copy">
+        <p class="eyebrow">Catálogo digital interactivo</p>
+        <h1>Catálogo Glam</h1>
+        <p class="lead">Mobiliario, cristalería y piezas decorativas para eventos. Una experiencia digital para explorar, buscar y administrar la colección por categorías.</p>
+        <div class="hero__actions">
+          <a class="primaryAction" href="#catalogo">Explorar colección</a>
+          <button class="secondaryAction" id="openAdminHero" type="button">Cargar productos</button>
+        </div>
+      </div>
+      <figure class="hero__visual hero__visual--collage">
+        <img src="assets/header-glam-events.png?v=1" alt="Ambientación de eventos Glam">
+      </figure>
+    </section>
+
+    <section class="categoryBand" id="categorias">
+      <div>
+        <p class="eyebrow">Secciones</p>
+        <h2>Categorías</h2>
+      </div>
+      <div class="categoryControls">
+        <label class="categorySearch">
+          <span>Buscar categoría</span>
+          <input id="categorySearchInput" type="search" placeholder="Filtrar categorías...">
+        </label>
+        <nav class="categories" id="categoryNav" aria-label="Categorías del catálogo"></nav>
+      </div>
+    </section>
+
+    <section class="catalogTools" id="catalogo">
+      <div>
+        <p class="eyebrow">Colección</p>
+        <h2 id="catalogTitle">Todos los artículos</h2>
+      </div>
+      <label class="search">
+        <span>Buscar</span>
+        <input id="searchInput" type="search" placeholder="Nombre, categoría, medida...">
+      </label>
+    </section>
+
+    <section class="summary" id="summary"></section>
+    <section class="grid" id="productGrid"></section>
+  </main>
+
+  <aside class="favoritesPanel" id="favoritesPanel" aria-label="Favoritos para mi evento">
+    <button class="favoritesToggle" id="favoritesToggle" type="button" aria-expanded="false">
+      <span>Favoritos</span>
+      <strong id="favoriteCount">0</strong>
+    </button>
+    <div class="favoritesPanel__head">
+      <div>
+        <p class="eyebrow">Mi selección</p>
+        <h2>Favoritos</h2>
+      </div>
+    </div>
+    <div class="favoritesList" id="favoritesList"></div>
+    <div class="favoritesEmpty" id="favoritesEmpty">Marca artículos con “Agregar a favoritos” para armar tu lista.</div>
+    <button class="primaryAction favoritesDownload" id="downloadFavoritesPdf" type="button">Descargar mi lista</button>
+  </aside>
+
+  <datalist id="categoryList"></datalist>
+
+  <dialog id="detailDialog" class="modal detailModal">
+    <button class="dialogClose" id="closeDialog" aria-label="Cerrar">×</button>
+    <div id="detailContent"></div>
+  </dialog>
+
+  <dialog id="adminDialog" class="modal adminModal">
+    <button class="dialogClose" id="closeAdminDialog" aria-label="Cerrar">×</button>
+    <div class="adminIntro">
+      <p class="eyebrow">Administrar catálogo</p>
+      <h2>Añadir artículos</h2>
+    </div>
+
+    <div class="adminTabs" role="tablist" aria-label="Tipo de carga">
+      <button class="active" type="button" data-panel="singlePanel">Individual</button>
+      <button type="button" data-panel="bulkPanel">Masiva</button>
+      <button type="button" data-panel="categoryPanel">Categorías</button>
+      <button type="button" data-panel="reportsPanel">Informes</button>
+    </div>
+
+    <form id="productForm" class="adminPanel active" data-admin-panel="singlePanel">
+      <div class="fields">
+        <label>Nombre<input name="name" required></label>
+        <label>Categoría<select name="category" data-category-select required></select></label>
+        <label>Subcategoría<input name="subcategory"></label>
+        <label>Precio<input name="price" placeholder="$"></label>
+        <label>Unidades<input name="stock"></label>
+        <label>Medidas<input name="dimensions"></label>
+        <label class="wide">Descripción<textarea name="description" rows="4" placeholder="Describe materiales, uso recomendado o detalles especiales"></textarea></label>
+        <label class="wide">Imagen del artículo<input name="imageFile" type="file" accept="image/*"></label>
+      </div>
+      <button class="primaryAction" type="submit">Añadir artículo</button>
+    </form>
+
+    <div class="adminPanel" data-admin-panel="bulkPanel">
+      <p class="hint">Importa Excel simple (.xlsx) o CSV con columnas: nombre, categoria, subcategoria, precio, unidades, medidas, imagen. Para imágenes locales, selecciona también archivos cuyo nombre coincida con el artículo.</p>
+      <div class="fields">
+        <label class="wide">Archivo Excel o CSV<input id="bulkFile" type="file" accept=".xlsx,.csv,.txt"></label>
+        <label class="wide">Imágenes relacionadas<input id="bulkImages" type="file" accept="image/*" multiple></label>
+      </div>
+      <div class="buttonRow">
+        <button id="importButton" class="primaryAction" type="button">Importar</button>
+        <button id="exportButton" class="secondaryAction" type="button">Exportar base</button>
+      </div>
+    </div>
+
+    <form id="categoryForm" class="adminPanel" data-admin-panel="categoryPanel">
+      <p class="hint">Crea una categoría nueva para usarla en los artículos. Se guardará directamente en Supabase.</p>
+      <div class="fields">
+        <label class="wide">Nombre de la categoría<input name="categoryName" required placeholder="Ej. Mobiliario lounge"></label>
+      </div>
+      <button class="primaryAction" type="submit">Crear categoría</button>
+    </form>
+
+    <div class="adminPanel" data-admin-panel="reportsPanel">
+      <p class="hint">Descarga un informe editable en Excel con imagen, nombre, cantidad, precio, medida y categoría. Puedes generarlo completo o filtrarlo por categoría.</p>
+      <div class="fields">
+        <label class="wide">Categoría del informe<select id="reportCategorySelect"></select></label>
+      </div>
+      <button id="downloadInventoryReport" class="primaryAction" type="button">Descargar informe Excel</button>
+    </div>
+    <p id="importStatus" class="status"></p>
+  </dialog>
+
+  <dialog id="editDialog" class="modal adminModal">
+    <button class="dialogClose" id="closeEditDialog" aria-label="Cerrar">×</button>
+    <div class="adminIntro">
+      <p class="eyebrow">Editar artículo</p>
+      <h2>Actualizar ficha</h2>
+    </div>
+    <form id="editForm" class="adminPanel active">
+      <div class="fields">
+        <label>Nombre<input name="name" required></label>
+        <label>Categoría<select name="category" data-category-select required></select></label>
+        <label>Subcategoría<input name="subcategory"></label>
+        <label>Precio<input name="price" placeholder="$"></label>
+        <label>Unidades<input name="stock"></label>
+        <label>Medidas<input name="dimensions"></label>
+        <label class="wide">Descripción<textarea name="description" rows="4" placeholder="Describe materiales, uso recomendado o detalles especiales"></textarea></label>
+        <label class="wide">Cambiar imagen principal<input name="imageFile" type="file" accept="image/*"></label>
+        <label class="wide">Agregar imágenes de referencia<input name="galleryFiles" type="file" accept="image/*" multiple></label>
+      </div>
+      <div class="editPreview" id="editPreview"></div>
+      <button class="primaryAction" type="submit">Guardar cambios</button>
+    </form>
+  </dialog>
+
+  <script src="app.js?v=44"></script>
+</body>
+</html>

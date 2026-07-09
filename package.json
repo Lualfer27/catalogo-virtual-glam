@@ -1,0 +1,18 @@
+{
+  "name": "catalogo-virtual-glam",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Catalogo digital interactivo Glam by Adriana Montoya.",
+  "scripts": {
+    "build": "node scripts/build-static.js",
+    "start": "node scripts/serve-static.js"
+  },
+  "keywords": [
+    "catalogo",
+    "glam",
+    "eventos",
+    "supabase",
+    "static-site"
+  ],
+  "license": "UNLICENSED"
+}

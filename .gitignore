@@ -1,0 +1,19 @@
+# Local/editor files
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+
+# Codex working files
+.agents/
+.codex/
+work/
+
+# Build output
+dist/
+node_modules/
+
+# Keep the generated catalog source tracked
+!outputs/
+!outputs/catalogo-virtual-glam/
